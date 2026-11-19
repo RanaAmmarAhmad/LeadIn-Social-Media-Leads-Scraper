@@ -1,0 +1,8 @@
+{
+  "name": "Leadin",
+  "description": "Automated social media freelance lead scraper, Gemini AI lead scorer, Gmail prospect alerter, and downloadable Chrome extension.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

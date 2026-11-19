@@ -1,0 +1,23 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+
+# Environment variables & secrets (keep example template)
+.env*
+!.env.example
+
+# Firebase & OAuth runtime configuration (keep example template)
+firebase-applet-config.json
+!firebase-applet-config.example.json
+
+# Private keys, certificates, and service accounts
+*.pem
+*.key
+*.p12
+*.pfx
+*service-account*.json
+*credentials*.json
+.aistudio/

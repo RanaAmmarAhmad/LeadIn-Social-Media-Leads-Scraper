@@ -1,0 +1,321 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User workspace preferences and Gmail alert settings.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the user."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254,
+          "description": "Verified account email address."
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "Display name of the user."
+        },
+        "alertThreshold": {
+          "type": "integer",
+          "description": "Minimum AI lead score (0-100) to qualify as a high-value prospect."
+        },
+        "alertRecipient": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254,
+          "description": "Destination email address for Gmail alert notifications."
+        },
+        "defaultKeywords": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Default freelance niche keywords for scrapes."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when profile was updated."
+        }
+      },
+      "required": [
+        "uid",
+        "email",
+        "displayName",
+        "alertThreshold",
+        "alertRecipient",
+        "defaultKeywords",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Campaign": {
+      "title": "Campaign",
+      "description": "A social media freelance scraping run configured by platform and date window.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the campaign owner."
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["facebook", "linkedin", "x", "reddit", "custom"],
+          "description": "Target social platform."
+        },
+        "dateFilter": {
+          "type": "string",
+          "enum": ["24h", "7d", "30d", "custom"],
+          "description": "Recency or custom date filter."
+        },
+        "customDate": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "Optional ISO date string when dateFilter is custom."
+        },
+        "keywords": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Search keywords used to filter freelance posts."
+        },
+        "targetUrl": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Resolved or custom social search URL."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["running", "completed", "failed"],
+          "description": "Execution status of the scrape run."
+        },
+        "leadsFoundCount": {
+          "type": "integer",
+          "description": "Total leads captured in this campaign."
+        },
+        "highValueCount": {
+          "type": "integer",
+          "description": "Count of high-value prospects meeting threshold."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when campaign started."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when campaign updated."
+        }
+      },
+      "required": [
+        "ownerId",
+        "platform",
+        "dateFilter",
+        "customDate",
+        "keywords",
+        "targetUrl",
+        "status",
+        "leadsFoundCount",
+        "highValueCount",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "A scraped and AI-scored freelance prospect extracted into the 6-column schema.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the lead owner."
+        },
+        "campaignId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Parent campaign document ID."
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["facebook", "linkedin", "x", "reddit", "custom"],
+          "description": "Origin social platform."
+        },
+        "accountName": {
+          "type": "string",
+          "maxLength": 160,
+          "description": "Author or company account name."
+        },
+        "postDate": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "Post publication date or relative timestamp."
+        },
+        "work": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Extracted freelance role or scope of work."
+        },
+        "post": {
+          "type": "string",
+          "maxLength": 4000,
+          "description": "Full or summarized social post body."
+        },
+        "link": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "Direct link to the post or profile."
+        },
+        "contact": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Extracted email, handle, booking URL, or DM cue."
+        },
+        "aiScore": {
+          "type": "integer",
+          "description": "AI-computed lead quality score from 0 to 100."
+        },
+        "scoreTier": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "Lead quality tier derived from score."
+        },
+        "aiRationale": {
+          "type": "string",
+          "maxLength": 600,
+          "description": "Concise AI explanation of budget, urgency, and fit."
+        },
+        "suggestedPitch": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Tailored outreach pitch generated by Gemini."
+        },
+        "alertSent": {
+          "type": "boolean",
+          "description": "Whether a Gmail prospect alert was sent for this lead."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["new", "contacted", "archived"],
+          "description": "Outreach workflow status."
+        },
+        "tags": {
+          "type": "array",
+          "description": "Bounded list of prospect classification tags (e.g., hot, cold, long-term; max 8)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when lead was saved."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when lead was updated."
+        }
+      },
+      "required": [
+        "ownerId",
+        "campaignId",
+        "platform",
+        "accountName",
+        "postDate",
+        "work",
+        "post",
+        "link",
+        "contact",
+        "aiScore",
+        "scoreTier",
+        "aiRationale",
+        "suggestedPitch",
+        "alertSent",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AlertLog": {
+      "title": "AlertLog",
+      "description": "Immutable audit record of a Gmail notification sent for high-value prospects.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the sender."
+        },
+        "leadIds": {
+          "type": "array",
+          "description": "Bounded list of included lead IDs (max 50)."
+        },
+        "recipientEmail": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254,
+          "description": "Recipient email address."
+        },
+        "subject": {
+          "type": "string",
+          "maxLength": 240,
+          "description": "Email subject line."
+        },
+        "highValueCount": {
+          "type": "integer",
+          "description": "Number of high-value prospects in the email."
+        },
+        "gmailMessageId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Gmail API returned message identifier."
+        },
+        "sentAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when Gmail alert was dispatched."
+        }
+      },
+      "required": [
+        "ownerId",
+        "leadIds",
+        "recipientEmail",
+        "subject",
+        "highValueCount",
+        "gmailMessageId",
+        "sentAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user workspace configuration and alert threshold preferences."
+    },
+    "/campaigns/{campaignId}": {
+      "schema": { "$ref": "#/entities/Campaign" },
+      "description": "User-owned social scraping campaigns."
+    },
+    "/leads/{leadId}": {
+      "schema": { "$ref": "#/entities/Lead" },
+      "description": "User-owned scraped and AI-scored freelance leads."
+    },
+    "/alertLogs/{alertId}": {
+      "schema": { "$ref": "#/entities/AlertLog" },
+      "description": "User-owned Gmail alert dispatch audit log."
+    }
+  }
+}
